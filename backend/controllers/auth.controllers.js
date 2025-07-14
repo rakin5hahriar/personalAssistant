@@ -47,3 +47,36 @@ try {
     return res.status(500).json({ message: 'Internal server error' });
 }
 };
+
+
+export const Login = async (req, res) => {
+try {
+    const { email, password } = req.body;
+
+    // Check if user already exists
+    const user = await User.findOne({ email });
+    if (!user) {
+        return res.status(400).json({ message: 'User does not exist' });
+    }
+
+
+    //6 password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+        return res.status(400).json({ message: 'Invalid password' });
+    }
+
+    const token = await genToken(user._id);
+
+    res.cookie('token', token, {
+        httpOnly: true,
+        secure: false, // Set to true if using HTTPS
+        sameSite: 'strict',
+        maxAge: 10 * 60 * 60 * 1000 // 10 hours
+    });
+
+    return res.status(200).json(user);
+} catch (error) {
+    return res.status(500).json({ message: 'Internal server error' });
+}
+};

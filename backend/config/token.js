@@ -12,7 +12,3 @@ const genToken = async (userId) => {
 
 export default genToken;
 
-import dotenv from 'dotenv';
-
-dotenv.config();
-// Import necessary modules
