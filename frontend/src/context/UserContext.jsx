@@ -146,7 +146,7 @@ export function UserProvider({ children }) {
   const updateProfile = async (profileData) => {
     setLoading(true)
     try {
-      const response = await api.put('/api/auth/profile', profileData)
+      const response = await api.put('/api/users/profile', profileData)
       if (response.data.success) {
         setUser(response.data.user)
         localStorage.setItem('user', JSON.stringify(response.data.user))

@@ -350,3 +350,44 @@ export const uploadUserImage = async (req, res) => {
         });
     }
 };
+
+// Update user profile (name, assistantName, assistantDescription, assistantImage)
+export const updateProfile = async (req, res) => {
+    try {
+        const { name, assistantName, assistantDescription, assistantImage } = req.body;
+        
+        // Build update object with only provided fields
+        const updateData = {};
+        if (name !== undefined) updateData.name = name;
+        if (assistantName !== undefined) updateData.assistantName = assistantName;
+        if (assistantDescription !== undefined) updateData.assistantDescription = assistantDescription;
+        if (assistantImage !== undefined) updateData.assistantImage = assistantImage;
+
+        const updatedUser = await User.findByIdAndUpdate(
+            req.user._id,
+            updateData,
+            { new: true, select: '-password' }
+        );
+
+        if (!updatedUser) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found'
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: 'Profile updated successfully',
+            user: updatedUser
+        });
+
+    } catch (error) {
+        console.error('Update profile error:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Server error during profile update',
+            error: error.message
+        });
+    }
+};

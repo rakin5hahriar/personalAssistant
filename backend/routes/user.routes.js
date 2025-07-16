@@ -8,7 +8,8 @@ import {
     searchUsers, 
     updatePreferences,
     getCurrentUser,
-    uploadUserImage
+    uploadUserImage,
+    updateProfile
 } from '../controllers/user.controllers.js';
 import isAuth from '../middlewares/isAuth.js';
 import upload from '../middlewares/multer.js';
@@ -20,6 +21,7 @@ userRouter.use(isAuth);
 
 // User management routes
 userRouter.get('/current', getCurrentUser);               // GET /api/users/current
+userRouter.put('/profile', updateProfile);                // PUT /api/users/profile
 userRouter.get('/stats', getUserStats);                    // GET /api/users/stats
 userRouter.put('/password', updatePassword);              // PUT /api/users/password
 userRouter.delete('/delete-account', deleteUser);         // DELETE /api/users/delete-account
