@@ -128,6 +128,103 @@ export function UserProvider({ children }) {
     }
   }
 
+  // Get current user data
+  const getCurrentUser = async () => {
+    try {
+      const response = await api.get('/api/users/current')
+      if (response.data.success) {
+        setUser(response.data.user)
+        return response.data.user
+      }
+    } catch (error) {
+      console.error('Get current user error:', error)
+      throw new Error(error.response?.data?.message || 'Failed to get user data')
+    }
+  }
+
+  // Update user profile
+  const updateProfile = async (profileData) => {
+    setLoading(true)
+    try {
+      const response = await api.put('/api/auth/profile', profileData)
+      if (response.data.success) {
+        setUser(response.data.user)
+        localStorage.setItem('user', JSON.stringify(response.data.user))
+        return response.data.user
+      }
+    } catch (error) {
+      console.error('Update profile error:', error)
+      throw new Error(error.response?.data?.message || 'Failed to update profile')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Update password
+  const updatePassword = async (passwordData) => {
+    setLoading(true)
+    try {
+      const response = await api.put('/api/users/password', passwordData)
+      if (response.data.success) {
+        return response.data
+      }
+    } catch (error) {
+      console.error('Update password error:', error)
+      throw new Error(error.response?.data?.message || 'Failed to update password')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Update user preferences
+  const updatePreferences = async (preferences) => {
+    setLoading(true)
+    try {
+      const response = await api.put('/api/users/preferences', { preferences })
+      if (response.data.success) {
+        setUser(response.data.user)
+        localStorage.setItem('user', JSON.stringify(response.data.user))
+        return response.data.user
+      }
+    } catch (error) {
+      console.error('Update preferences error:', error)
+      throw new Error(error.response?.data?.message || 'Failed to update preferences')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Get user statistics
+  const getUserStats = async () => {
+    try {
+      const response = await api.get('/api/users/stats')
+      if (response.data.success) {
+        return response.data.stats
+      }
+    } catch (error) {
+      console.error('Get user stats error:', error)
+      throw new Error(error.response?.data?.message || 'Failed to get user statistics')
+    }
+  }
+
+  // Delete user account
+  const deleteAccount = async () => {
+    setLoading(true)
+    try {
+      const response = await api.delete('/api/users/delete-account')
+      if (response.data.success) {
+        setUser(null)
+        localStorage.removeItem('user')
+        return response.data
+      }
+    } catch (error) {
+      console.error('Delete account error:', error)
+      throw new Error(error.response?.data?.message || 'Failed to delete account')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <UserContext.Provider value={{ 
       user, 
@@ -137,7 +234,13 @@ export function UserProvider({ children }) {
       logout, 
       loading,
       initialLoading,
-      checkAuth
+      checkAuth,
+      getCurrentUser,
+      updateProfile,
+      updatePassword,
+      updatePreferences,
+      getUserStats,
+      deleteAccount
     }}>
       {children}
     </UserContext.Provider>

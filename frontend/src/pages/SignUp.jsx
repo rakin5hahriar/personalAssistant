@@ -59,7 +59,7 @@ function SignUp() {
       
       // TODO: Add navigation to dashboard after a short delay
       setTimeout(() => {
-        // Navigate to dashboard
+        Navigate('/customize')
       }, 2000)
       
     } catch (error) {

@@ -35,7 +35,7 @@ function SignIn() {
       
       // TODO: Add navigation to dashboard after a short delay
       setTimeout(() => {
-        // Navigate to dashboard
+        Navigate('/')
       }, 1500)
       
     } catch (error) {

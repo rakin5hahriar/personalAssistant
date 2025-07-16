@@ -1,6 +1,33 @@
 import User from '../models/user.model.js';
 import bcrypt from 'bcryptjs';
 
+// Get current authenticated user
+export const getCurrentUser = async (req, res) => {
+    try {
+        // User is already attached to req by isAuth middleware
+        const user = await User.findById(req.user._id).select('-password');
+        
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found'
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: 'Current user retrieved successfully',
+            user: user
+        });
+    } catch (error) {
+        console.error('Get current user error:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error'
+        });
+    }
+};
+
 // Get all users (Admin only)
 export const getAllUsers = async (req, res) => {
     try {

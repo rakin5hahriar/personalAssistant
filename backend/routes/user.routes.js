@@ -6,7 +6,8 @@ import {
     deleteUser, 
     getUserStats, 
     searchUsers, 
-    updatePreferences 
+    updatePreferences,
+    getCurrentUser
 } from '../controllers/user.controllers.js';
 import isAuth from '../middlewares/isAuth.js';
 
@@ -16,6 +17,7 @@ const userRouter = express.Router();
 userRouter.use(isAuth);
 
 // User management routes
+userRouter.get('/current', getCurrentUser);               // GET /api/users/current
 userRouter.get('/stats', getUserStats);                    // GET /api/users/stats
 userRouter.put('/password', updatePassword);              // PUT /api/users/password
 userRouter.delete('/delete-account', deleteUser);         // DELETE /api/users/delete-account
