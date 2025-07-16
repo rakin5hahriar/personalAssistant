@@ -194,6 +194,32 @@ export function UserProvider({ children }) {
     }
   }
 
+  // Upload user image
+  const uploadImage = async (imageFile) => {
+    setLoading(true)
+    try {
+      const formData = new FormData()
+      formData.append('image', imageFile)
+
+      const response = await api.post('/api/users/upload-image', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+
+      if (response.data.success) {
+        setUser(response.data.user)
+        localStorage.setItem('user', JSON.stringify(response.data.user))
+        return response.data.imageUrl
+      }
+    } catch (error) {
+      console.error('Upload image error:', error)
+      throw new Error(error.response?.data?.message || 'Failed to upload image')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   // Get user statistics
   const getUserStats = async () => {
     try {
@@ -239,6 +265,7 @@ export function UserProvider({ children }) {
       updateProfile,
       updatePassword,
       updatePreferences,
+      uploadImage,
       getUserStats,
       deleteAccount
     }}>

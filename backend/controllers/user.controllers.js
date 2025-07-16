@@ -1,5 +1,6 @@
 import User from '../models/user.model.js';
 import bcrypt from 'bcryptjs';
+import uploadOnCloudinary from '../config/cloudinary.js';
 
 // Get current authenticated user
 export const getCurrentUser = async (req, res) => {
@@ -302,6 +303,50 @@ export const updatePreferences = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: 'Internal server error'
+        });
+    }
+};
+
+// Upload user image (avatar)
+export const uploadUserImage = async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({
+                success: false,
+                message: 'No image file provided'
+            });
+        }
+
+        // Upload to cloudinary
+        const imageUrl = await uploadOnCloudinary(req.file.path);
+        
+        if (!imageUrl) {
+            return res.status(500).json({
+                success: false,
+                message: 'Failed to upload image to cloud storage'
+            });
+        }
+
+        // Update user's assistantImage
+        const updatedUser = await User.findByIdAndUpdate(
+            req.user._id,
+            { assistantImage: imageUrl },
+            { new: true, select: '-password' }
+        );
+
+        return res.status(200).json({
+            success: true,
+            message: 'Image uploaded successfully',
+            imageUrl: imageUrl,
+            user: updatedUser
+        });
+
+    } catch (error) {
+        console.error('Image upload error:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Server error during image upload',
+            error: error.message
         });
     }
 };

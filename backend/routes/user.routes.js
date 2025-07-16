@@ -7,9 +7,11 @@ import {
     getUserStats, 
     searchUsers, 
     updatePreferences,
-    getCurrentUser
+    getCurrentUser,
+    uploadUserImage
 } from '../controllers/user.controllers.js';
 import isAuth from '../middlewares/isAuth.js';
+import upload from '../middlewares/multer.js';
 
 const userRouter = express.Router();
 
@@ -22,6 +24,7 @@ userRouter.get('/stats', getUserStats);                    // GET /api/users/sta
 userRouter.put('/password', updatePassword);              // PUT /api/users/password
 userRouter.delete('/delete-account', deleteUser);         // DELETE /api/users/delete-account
 userRouter.put('/preferences', updatePreferences);        // PUT /api/users/preferences
+userRouter.post('/upload-image', upload.single('image'), uploadUserImage);  // POST /api/users/upload-image
 
 // Admin routes (you might want to add admin middleware later)
 userRouter.get('/all', getAllUsers);                      // GET /api/users/all
