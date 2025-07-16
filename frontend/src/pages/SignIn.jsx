@@ -9,6 +9,8 @@ function SignIn() {
   })
 
   const [showPassword, setShowPassword] = useState(false)
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
 
   const handleChange = (e) => {
     setFormData({
@@ -19,16 +21,26 @@ function SignIn() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setError('')
+    setSuccess('')
     
     try {
       await login({
         email: formData.email,
         password: formData.password
       })
-      // Redirect to dashboard or home page after successful login
+      
+      setSuccess('Sign in successful! Redirecting...')
       console.log('Sign in successful!')
+      
+      // TODO: Add navigation to dashboard after a short delay
+      setTimeout(() => {
+        // Navigate to dashboard
+      }, 1500)
+      
     } catch (error) {
-      alert('Sign in failed. Please check your credentials.')
+      console.error('Login error:', error)
+      setError(error.message || 'Sign in failed. Please check your credentials.')
     }
   }
 
@@ -45,6 +57,38 @@ function SignIn() {
         </div>
         
         <div className="bg-white py-8 px-6 shadow-lg rounded-xl border border-gray-200">
+          {/* Error Message */}
+          {error && (
+            <div className="mb-4 p-4 rounded-lg bg-red-50 border border-red-200">
+              <div className="flex">
+                <div className="flex-shrink-0">
+                  <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm text-red-700">{error}</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Success Message */}
+          {success && (
+            <div className="mb-4 p-4 rounded-lg bg-green-50 border border-green-200">
+              <div className="flex">
+                <div className="flex-shrink-0">
+                  <svg className="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm text-green-700">{success}</p>
+                </div>
+              </div>
+            </div>
+          )}
+
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
