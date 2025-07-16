@@ -20,7 +20,7 @@ export function UserProvider({ children }) {
   // Check if user is authenticated on app load
   const checkAuth = async () => {
     try {
-      const response = await api.get('/api/users/check-auth')
+      const response = await api.get('/api/auth/check-auth')
       if (response.data.success) {
         setUser(response.data.user)
       }
@@ -43,7 +43,7 @@ export function UserProvider({ children }) {
     try {
       console.log('Attempting login with:', { email: userData.email, password: '***hidden***' })
       
-      const response = await api.post('/api/users/login', {
+      const response = await api.post('/api/auth/login', {
         email: userData.email,
         password: userData.password
       })
@@ -85,7 +85,7 @@ export function UserProvider({ children }) {
         password: '***hidden***' 
       })
       
-      const response = await api.post('/api/users/signup', {
+      const response = await api.post('/api/auth/signup', {
         name: userData.name,
         email: userData.email,
         password: userData.password
@@ -119,7 +119,7 @@ export function UserProvider({ children }) {
 
   const logout = async () => {
     try {
-      await api.get('/api/users/logout')
+      await api.get('/api/auth/logout')
     } catch (error) {
       console.error('Logout error:', error)
     } finally {

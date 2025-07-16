@@ -22,6 +22,15 @@ const userSchema = new mongoose.Schema({
     history: [{
         type: String
     }],
+    preferences: {
+        type: Object,
+        default: {
+            theme: 'light',
+            language: 'en',
+            notifications: true,
+            assistantVoice: 'default'
+        }
+    },
 }, {
   timestamps: true,
 });

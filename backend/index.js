@@ -4,6 +4,7 @@ dotenv.config();
 import { connect } from 'mongoose';
 import connectDB from './config/db.js';
 import authRouter from './routes/auth.routes.js';
+import userRouter from './routes/user.routes.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
@@ -19,7 +20,10 @@ app.use(cors(
 ));
 app.use(express.json());
 app.use(cookieParser());
-app.use("/api/users", authRouter);
+
+// Routes
+app.use("/api/auth", authRouter);  // Authentication routes
+app.use("/api/users", userRouter); // User management routes
 
 app.listen(PORT, () => {
     connectDB();
