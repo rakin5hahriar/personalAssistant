@@ -4,6 +4,7 @@ import { UserProvider, useUser } from './context/UserContext'
 import SignIn from './pages/SignIn.jsx'
 import SignUp from './pages/SignUp.jsx'
 import Customize from './pages/Customize.jsx'
+import Home from './pages/Home.jsx'
 
 function AppRoutes() {
   const { user, initialLoading } = useUser()
@@ -21,9 +22,10 @@ function AppRoutes() {
 
   return (
     <Routes>
-      <Route path="/" element={user ? <Navigate to="/customize" replace /> : <Navigate to="/signin" replace />} />
-      <Route path="/signin" element={!user ? <SignIn /> : <Navigate to="/customize" replace />} />
-      <Route path="/signup" element={!user ? <SignUp /> : <Navigate to="/customize" replace />} />
+      <Route path="/" element={user ? <Navigate to="/home" replace /> : <Navigate to="/signin" replace />} />
+      <Route path="/signin" element={!user ? <SignIn /> : <Navigate to="/home" replace />} />
+      <Route path="/signup" element={!user ? <SignUp /> : <Navigate to="/home" replace />} />
+      <Route path="/home" element={user ? <Home /> : <Navigate to="/signin" replace />} />
       <Route path="/customize" element={user ? <Customize /> : <Navigate to="/signin" replace />} />
       {/* Add more routes as needed */}
     </Routes>

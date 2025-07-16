@@ -9,7 +9,8 @@ import {
     updatePreferences,
     getCurrentUser,
     uploadUserImage,
-    updateProfile
+    updateProfile,
+    sendMessage
 } from '../controllers/user.controllers.js';
 import isAuth from '../middlewares/isAuth.js';
 import upload from '../middlewares/multer.js';
@@ -27,6 +28,7 @@ userRouter.put('/password', updatePassword);              // PUT /api/users/pass
 userRouter.delete('/delete-account', deleteUser);         // DELETE /api/users/delete-account
 userRouter.put('/preferences', updatePreferences);        // PUT /api/users/preferences
 userRouter.post('/upload-image', upload.single('image'), uploadUserImage);  // POST /api/users/upload-image
+userRouter.post('/send-message', sendMessage);            // POST /api/users/send-message
 
 // Admin routes (you might want to add admin middleware later)
 userRouter.get('/all', getAllUsers);                      // GET /api/users/all

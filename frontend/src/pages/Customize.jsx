@@ -5,7 +5,7 @@ import ProfileCard from '../components/customize/ProfileCard'
 import ThemeCard from '../components/customize/ThemeCard'
 
 function Customize() {
-  const { user, updateProfile, updatePreferences, loading } = useUser()
+  const { user, updateProfile, updatePreferences, loading, logout } = useUser()
   
   const [profileData, setProfileData] = useState({
     name: '',
@@ -127,6 +127,23 @@ function Customize() {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <button
+              onClick={() => window.location.href = '/home'}
+              className="flex items-center text-purple-600 hover:text-purple-700 font-medium transition-colors"
+            >
+              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              Back to Chat
+            </button>
+            <button
+              onClick={logout}
+              className="text-gray-500 hover:text-gray-700 font-medium transition-colors"
+            >
+              Logout
+            </button>
+          </div>
           <h1 className="text-4xl font-bold text-gray-900 mb-2">
             Customize Your Assistant
           </h1>

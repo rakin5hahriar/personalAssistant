@@ -391,3 +391,56 @@ export const updateProfile = async (req, res) => {
         });
     }
 };
+
+// Send message to assistant (placeholder for AI integration)
+export const sendMessage = async (req, res) => {
+    try {
+        const { message } = req.body;
+        
+        if (!message || !message.trim()) {
+            return res.status(400).json({
+                success: false,
+                message: 'Message is required'
+            });
+        }
+
+        // Store the message in user's history
+        const user = await User.findById(req.user._id);
+        if (!user.history) {
+            user.history = [];
+        }
+        
+        user.history.push(`User: ${message}`);
+        
+        // Simple AI response logic (you can replace with actual AI API)
+        const responses = [
+            "That's an interesting question! Let me help you with that.",
+            "I understand what you're asking. Here's what I think...",
+            "Great question! Based on what you've told me, I'd suggest...",
+            "I'm here to help! Let me break this down for you.",
+            "That's a thoughtful inquiry. Here's my perspective...",
+            "I appreciate you asking! Here's what I would recommend...",
+            `Thanks for sharing that with me, ${user.name || 'friend'}!`
+        ];
+        
+        const aiResponse = responses[Math.floor(Math.random() * responses.length)];
+        user.history.push(`Assistant: ${aiResponse}`);
+        
+        await user.save();
+
+        return res.status(200).json({
+            success: true,
+            message: 'Message sent successfully',
+            response: aiResponse,
+            timestamp: new Date()
+        });
+
+    } catch (error) {
+        console.error('Send message error:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Server error during message processing',
+            error: error.message
+        });
+    }
+};
